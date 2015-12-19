@@ -1,20 +1,17 @@
 import urllib3
 from flask import Flask, redirect, url_for, session, request, jsonify
 from flask_oauthlib.client import OAuth
+
 app = Flask(__name__)
-app.secret_key = 'development'
+app.config.from_object('config.DevelopmentConfig')
 
-
-API_KEY = 'AIzaSyC18XwmwFNG_MEB6PKmVaVFkc_PpI48UE4'
-GOOGLE_ID = '470070395889-06tkamvds9t4id4lfj2bc18b224c76i9.apps.googleusercontent.com'
-GOOGLE_SECRET = 'NI7nSP5cVNuoMahXV834zBQK'
 
 oauth = OAuth(app)
 
 gmail = oauth.remote_app(
     'gmail',
-    consumer_key=GOOGLE_ID,
-    consumer_secret=GOOGLE_SECRET,
+    consumer_key=app.config.get('GOOGLE_ID'),
+    consumer_secret=app.config.get('GOOGLE_SECRET'),
     request_token_params={
         'scope': ['https://www.googleapis.com/auth/gmail.readonly', 'email']
     },
