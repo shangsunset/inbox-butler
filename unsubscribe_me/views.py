@@ -1,13 +1,18 @@
 import urllib3
 from flask import redirect, url_for, session, request, jsonify
 from . import app, gmail
+from .inbox import Inbox
 
 
 @app.route('/')
 def index():
     if 'access_token' in session:
         me = gmail.get('userinfo')
-        return jsonify({"data": me.data})
+        user_id = me.data['id']
+        access_token = get_access_token()
+        inbox = Inbox(gmail, access_token, user_id)
+        emails = inbox.emails
+        return jsonify({"emails": emails, 'me': user_id})
     return redirect(url_for('login'))
 
 
@@ -33,30 +38,10 @@ def authorized():
     session['access_token'] = (resp['access_token'], '')
     me = gmail.get('userinfo')
     user_id = me.data['id']
-    get_emails(user_id)
-    return jsonify({"data": me.data})
-
-
-def get_emails(id):
     access_token = get_access_token()
-    access_token = access_token[0]
-    url = 'https://www.googleapis.com/gmail/v1/users/{}/messages?q=category:promotions+newer_than:3m'.format(id)
-    messages = []
-
-    try:
-        res = gmail.get(url)
-        if 'messages' in res.data:
-            messages.extend(res.data['messages'])
-        while 'nextPageToken' in res.data:
-            page_token = res.data['nextPageToken']
-            new_url = '{url}&pageToken={page_token}'.format(url=url, page_token=page_token)
-            res = gmail.get(new_url)
-            messages.extend(res.data['messages'])
-    except urllib3.exceptions.HTTPError as err:
-        print(err.code)
-
-    # return messages
-    print(messages)
+    inbox = Inbox(gmail, access_token, user_id)
+    emails = inbox.emails
+    return jsonify({'me': user_id, "emails": emails})
 
 
 @gmail.tokengetter
