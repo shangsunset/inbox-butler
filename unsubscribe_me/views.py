@@ -1,3 +1,4 @@
+import time
 import urllib3
 from flask import redirect, url_for, session, request, jsonify
 from . import app, gmail
@@ -12,7 +13,7 @@ def index():
         access_token = get_access_token()
         inbox = Inbox(gmail, access_token, user_id)
         emails = inbox.emails
-        return jsonify({"emails": emails, 'me': user_id})
+        return jsonify({"emails": emails, 'me': user_id, 'count': len(emails)})
     return redirect(url_for('login'))
 
 
@@ -29,6 +30,7 @@ def logout():
 
 @app.route('/authorized')
 def authorized():
+    start = time.time()
     resp = gmail.authorized_response()
     if resp is None:
         return 'Access denied: reason={} error={}'.format(
@@ -41,7 +43,8 @@ def authorized():
     access_token = get_access_token()
     inbox = Inbox(gmail, access_token, user_id)
     emails = inbox.emails
-    return jsonify({'me': user_id, "emails": emails})
+    end = time.time()
+    return jsonify({'me': user_id, "emails": emails, "count": len(emails), 'time': end - start})
 
 
 @gmail.tokengetter
