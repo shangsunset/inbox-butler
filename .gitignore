@@ -1,6 +1,12 @@
+/node_modules
 config.py
+client_secret.json
 .DS_Store
 .python-version
+
+
+
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]

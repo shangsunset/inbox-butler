@@ -1,20 +1,37 @@
 import time
 import urllib3
-from flask import redirect, url_for, session, request, jsonify
+from flask import redirect, url_for, session, request, jsonify, render_template
 from . import app, gmail
 from .inbox import Inbox
 
 
-@app.route('/')
-def index():
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    return render_template('index.html')
+
+
+@app.route('/emails')
+def emails():
     if 'access_token' in session:
         me = gmail.get('userinfo')
         user_id = me.data['id']
         access_token = get_access_token()
+        start = time.time()
         inbox = Inbox(gmail, access_token, user_id)
-        emails = inbox.emails
-        return jsonify({"emails": emails, 'me': user_id, 'count': len(emails)})
-    return redirect(url_for('login'))
+        subscriptions = inbox.subscriptions
+        end = time.time()
+        return jsonify({
+            "subscriptions": subscriptions,
+            'me': user_id,
+            'count': len(subscriptions),
+            'time': end - start,
+            'request time': inbox.request_time
+        })
+    return jsonify({
+        'status': 403,
+        'session': session.get('access_token')
+    })
 
 
 @app.route('/login')
@@ -25,12 +42,11 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('access_token', None)
-    return redirect(url_for('index'))
+    return redirect('/')
 
 
 @app.route('/authorized')
 def authorized():
-    start = time.time()
     resp = gmail.authorized_response()
     if resp is None:
         return 'Access denied: reason={} error={}'.format(
@@ -38,13 +54,7 @@ def authorized():
             request.args['error_description']
         )
     session['access_token'] = (resp['access_token'], '')
-    me = gmail.get('userinfo')
-    user_id = me.data['id']
-    access_token = get_access_token()
-    inbox = Inbox(gmail, access_token, user_id)
-    emails = inbox.emails
-    end = time.time()
-    return jsonify({'me': user_id, "emails": emails, "count": len(emails), 'time': end - start})
+    return redirect('subscriptions')
 
 
 @gmail.tokengetter

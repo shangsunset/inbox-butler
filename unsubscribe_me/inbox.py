@@ -1,7 +1,6 @@
+import time
 import base64
-import pprint
 import urllib3
-from bs4 import BeautifulSoup
 
 
 class Inbox():
@@ -11,14 +10,19 @@ class Inbox():
         self.access_token = access_token
         self.email_senders = []
         self.user_id = user_id
-        self.emails = self.get_emails()
+        self.request_time = 0
+        self.subscriptions = self.get_subscriptions()
 
-    def get_emails(self):
-        url = 'https://www.googleapis.com/gmail/v1/users/{}/messages?q=category:(promotions+OR+primary)+newer_than:14d'.format(self.user_id)
+    def get_subscriptions(self):
+        url = 'https://www.googleapis.com/gmail/v1/users/{}/messages?q=category:(promotions+OR+primary)+newer_than:1d'.format(self.user_id)
         messages = []
 
         try:
+            start = time.time()
             res = self.gmail.get(url)
+            end = time.time()
+            self.request_time += end - start
+
             if 'messages' in res.data:
                 messages.extend(res.data['messages'])
             while 'nextPageToken' in res.data:
@@ -29,14 +33,14 @@ class Inbox():
         except urllib3.exceptions.HTTPError as err:
             print(err.code)
 
-        emails = []
+        subscriptions = []
         for message in messages:
             email = self.get_unsubscribe_info(message['id'])
 
             if email is not None:
-                emails.append(email.copy())
+                subscriptions.append(email.copy())
 
-        return emails
+        return subscriptions
         # return messages
 
     def get_unsubscribe_info(self, email_id):
@@ -45,7 +49,11 @@ class Inbox():
         returns a dict contains sender'name and unsubscribe methods
         """
         url = 'https://www.googleapis.com/gmail/v1/users/{}/messages/{}'.format(self.user_id, email_id)
+
+        start = time.time()
         response = self.gmail.get(url)
+        end = time.time()
+        self.request_time += end - start
         payload = response.data['payload']
 
         unsubscribe_info = {'email_id': email_id}
@@ -59,6 +67,7 @@ class Inbox():
                 # name = value[:value.index('<')]
                 text = value.split()[:-1]
                 name = ' '.join([i for i in text])
+                # get rid of any non-asci character
                 name = ''.join([i if ord(i) < 128 else '' for i in name])
                 unsubscribe_info['sender_name'] = name.strip('\" ')
 
@@ -90,27 +99,3 @@ class Inbox():
             return unsubscribe_info
 
         return None
-
-    # def scan_through_emails(self, email_id):
-    #     """
-    #     get email sender, content from gmail api response object
-    #     return dict
-    #     """
-    #
-    #     url = 'https://www.googleapis.com/gmail/v1/users/{}/messages/{}'.format(self.user_id, email_id)
-    #     response = self.gmail.get(url)
-    #     payload = response.data['payload']
-    #
-        # if 'parts' in payload:
-        #     if len(payload['parts']) > 1:
-        #         body = payload['parts'][1]['body']['data']
-        #     else:
-        #         if 'parts' in payload['parts'][0]:
-        #             body = payload['parts'][0]['parts'][0]['body']['data']
-        #         else:
-        #             body = payload['parts'][0]['body']['data']
-        # else:
-        #     body = payload['body']['data']
-        #
-        # decoded_body = base64.b64decode(body.replace('-', '+').replace('_', '/'))
-        # return {'email_id': email_id, 'body': decoded_body}
