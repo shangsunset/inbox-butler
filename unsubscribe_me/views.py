@@ -11,8 +11,8 @@ def catch_all(path):
     return render_template('index.html')
 
 
-@app.route('/emails')
-def emails():
+@app.route('/api/subscriptions')
+def index():
     if 'access_token' in session:
         me = gmail.get('userinfo')
         user_id = me.data['id']
@@ -29,8 +29,7 @@ def emails():
             'request time': inbox.request_time
         })
     return jsonify({
-        'status': 403,
-        'session': session.get('access_token')
+        'status': 400
     })
 
 

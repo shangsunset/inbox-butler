@@ -1,6 +1,6 @@
 import { RECEIVE_SUBSCRIPTIONS } from '../constants/ActionTypes'
 
-export default function subscriptions(state={subscriptions: []}, action) {
+export default function subscriptions(state={}, action) {
   switch(action.type) {
     case RECEIVE_SUBSCRIPTIONS:
       return {

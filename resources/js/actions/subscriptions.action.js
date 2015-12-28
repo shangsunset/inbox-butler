@@ -7,9 +7,16 @@ export const receiveSubscriptions = (data) => {
   }
 }
 
+export function removeSubscription() {
+  return {
+    type: types.REMOVE_SUBSCRIPTION
+  }
+}
+
 export const fetchSubscriptions = () => {
   return (dispatch) => {
-    return fetch('/emails', {
+
+      fetch('/api/subscriptions', {
         credentials: 'same-origin'
       })
       .then(checkStatus)
@@ -17,12 +24,30 @@ export const fetchSubscriptions = () => {
         return response.json()
       })
       .then(data => {
-        console.log(data.subscriptions);
         dispatch(receiveSubscriptions(data.subscriptions))
       })
       .catch(error => {
         console.error(error)
       })
+  }
+}
+
+export function unsubscribe(link) {
+  return dispatch => {
+    
+    fetch('/unsubscribe', {
+      method: 'post',
+      credentials: 'same-origin',
+      body: JSON.stringify({'link': link})
+    })
+    .then(checkStatus)
+    .then(response => {
+      return response.json()
+    })
+    .then(data => (
+      dispatch(removeSubscription())
+    ))
+
   }
 }
 

@@ -41,7 +41,6 @@ class Inbox():
                 subscriptions.append(email.copy())
 
         return subscriptions
-        # return messages
 
     def get_unsubscribe_info(self, email_id):
         """
@@ -56,7 +55,7 @@ class Inbox():
         self.request_time += end - start
         payload = response.data['payload']
 
-        unsubscribe_info = {'email_id': email_id}
+        unsubscribe_info = {}
         unsubscribe_methods = {}
         is_newsletter = False
         headers = payload['headers']
@@ -69,10 +68,10 @@ class Inbox():
                 name = ' '.join([i for i in text])
                 # get rid of any non-asci character
                 name = ''.join([i if ord(i) < 128 else '' for i in name])
-                unsubscribe_info['sender_name'] = name.strip('\" ')
+                unsubscribe_info['sender'] = name.strip('\" ')
 
-                if unsubscribe_info['sender_name'] not in self.email_senders:
-                    self.email_senders.append(unsubscribe_info['sender_name'])
+                if unsubscribe_info['sender'] not in self.email_senders:
+                    self.email_senders.append(unsubscribe_info['sender'])
                 else:
                     return None
 

@@ -1,4 +1,5 @@
 import React from 'react'
+import 'babel-core/polyfill'
 import { render } from 'react-dom'
 import { Router, Route, Link } from 'react-router'
 import { Provider } from 'react-redux'
