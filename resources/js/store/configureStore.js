@@ -2,7 +2,7 @@ import { createStore, applyMiddleware } from 'redux'
 import thunkMiddleware from 'redux-thunk'
 import createLogger from 'redux-logger'
 
-import subscriptions from '../reducers/subscriptions.reducer'
+import rootReducer from '../reducers/subscriptions.reducer'
 
 const createStoreWithMiddleware = applyMiddleware(
   thunkMiddleware,
@@ -11,7 +11,7 @@ const createStoreWithMiddleware = applyMiddleware(
 
 export default function configureStore() {
 
-  const store = createStoreWithMiddleware(subscriptions)
+  const store = createStoreWithMiddleware(rootReducer)
 
   return store
 }

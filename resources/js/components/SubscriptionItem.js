@@ -5,6 +5,21 @@ import Subscription from './Subscription'
 const SubscriptionItem = (props) => {
   
   const { subscription } = props
+  const methods = subscription['unsubscribe_methods']
+  let method = {}
+  if ('mailto' in methods) {
+    let email = methods['mailto'].split('mailto:')[1]
+    if (email.indexOf('?subject=') !== -1) {
+      const parts = email.split('?subject=')
+      method['email'] = parts[0]
+      method['suject'] = parts[1]
+    } else {
+      method['email'] = email
+      method['subject'] = 'unsubscribe'
+    }
+  } else {
+    method['link'] = methods['link']
+  }
 
   return (
     <li className="list-group-item">
@@ -15,7 +30,7 @@ const SubscriptionItem = (props) => {
         <div className="col-md-6">
           <button
             className="btn btn-success pull-right"
-            onClick={() => props.handleUnsubscribe()}>
+            onClick={() => props.handleUnsubscribe(props.index, method)}>
             Unsubscribe
           </button>
         </div>

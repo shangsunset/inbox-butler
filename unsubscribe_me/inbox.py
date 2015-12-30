@@ -82,9 +82,9 @@ class Inbox():
                     methods = value.split(',')
                     for method in methods:
                         if 'mailto' in method:
-                            unsubscribe_methods['mailto'] = method.strip('<>')
+                            unsubscribe_methods['mailto'] = method.strip('< >')
                         else:
-                            unsubscribe_methods['link'] = method.strip('<>')
+                            unsubscribe_methods['link'] = method.strip('< >')
                 else:
                     method = value.strip('<>')
                     if 'mailto' in method:

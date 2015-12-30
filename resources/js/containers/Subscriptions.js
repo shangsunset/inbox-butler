@@ -1,19 +1,26 @@
 import React, { Component, PropTypes } from 'react'
+import { Link } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import { fetchSubscriptions } from '../actions/subscriptions.action'
+import * as SubscriptionActions from '../actions/subscriptions.action'
 import SubscriptionItem from '../components/SubscriptionItem'
 
 class Subscriptions extends Component {
-
-  componentDidMount() {
-    const { actions } = this.props
-    actions.fetchSubscriptions()
+  constructor(props) {
+    super()
+    this.handleUnsubscribe = this.handleUnsubscribe.bind(this)
   }
 
-  handleUnsubscribe() {
+  componentDidMount() {
+    const { dispatch } = this.props
+    dispatch(SubscriptionActions.fetchSubscriptions())
+  }
+
+  handleUnsubscribe(index, method) {
     
-    console.log('un-subscribing');
+    const { dispatch } = this.props
+    dispatch(SubscriptionActions.sendUnsubscribeRequest(index, method))
+
   }
 
   render() {
@@ -24,6 +31,7 @@ class Subscriptions extends Component {
         subscriptions.map((subscription, index) => 
           <SubscriptionItem
             key={index}
+            index={index}
             subscription={subscription}
             handleUnsubscribe={this.handleUnsubscribe}
           />
@@ -35,6 +43,8 @@ class Subscriptions extends Component {
 
     return (
       <div className="col-md-8 col-md-offset-2">
+        
+        <Link to='/'>Home</Link>
         <ul className="list-group">
           { partial }
         </ul>
@@ -49,10 +59,13 @@ function mapStateToProps(state) {
   } 
 }
 
-function mapDispatchToProps(dispatch) {
-  return {
-    actions: bindActionCreators({ fetchSubscriptions }, dispatch)
-  }
-}
+// function mapDispatchToProps(dispatch) {
+//   return {
+//     actions: bindActionCreators({ SubscriptionActions }, dispatch)
+//   }
+// }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Subscriptions)
+export default connect(
+  mapStateToProps,
+  // mapDispatchToProps
+)(Subscriptions)

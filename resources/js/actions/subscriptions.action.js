@@ -7,16 +7,40 @@ export const receiveSubscriptions = (data) => {
   }
 }
 
-export function removeSubscription() {
+export function removeSubscription(index) {
   return {
-    type: types.REMOVE_SUBSCRIPTION
+    type: types.REMOVE_SUBSCRIPTION,
+    index
+  }
+}
+
+export function sendUnsubscribeRequest(index, method) {
+  return dispatch => {
+    dispatch(removeSubscription(index))
+
+    return fetch('/api/unsubscribe', {
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        method: method
+      })
+    })
+    .then(checkStatus)
+    .then(response => {
+      return response.json()
+    })
+    .then(result => {
+      
+    })
+    // .catch(error => {
+    //   console.error(error)
+    // })
   }
 }
 
 export const fetchSubscriptions = () => {
   return (dispatch) => {
 
-      fetch('/api/subscriptions', {
+      return fetch('/api/subscriptions', {
         credentials: 'same-origin'
       })
       .then(checkStatus)
@@ -26,30 +50,12 @@ export const fetchSubscriptions = () => {
       .then(data => {
         dispatch(receiveSubscriptions(data.subscriptions))
       })
-      .catch(error => {
-        console.error(error)
-      })
+      // .catch(error => {
+      //   console.error(error)
+      // })
   }
 }
 
-export function unsubscribe(link) {
-  return dispatch => {
-    
-    fetch('/unsubscribe', {
-      method: 'post',
-      credentials: 'same-origin',
-      body: JSON.stringify({'link': link})
-    })
-    .then(checkStatus)
-    .then(response => {
-      return response.json()
-    })
-    .then(data => (
-      dispatch(removeSubscription())
-    ))
-
-  }
-}
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
