@@ -18,8 +18,9 @@ export function sendUnsubscribeRequest(index, method) {
   return dispatch => {
     dispatch(removeSubscription(index))
 
-    return fetch('/api/unsubscribe', {
+    return fetch('/api/subscriptions', {
       credentials: 'same-origin',
+      method: 'post',
       body: JSON.stringify({
         method: method
       })
@@ -29,11 +30,12 @@ export function sendUnsubscribeRequest(index, method) {
       return response.json()
     })
     .then(result => {
+      console.log(result);
       
     })
-    // .catch(error => {
-    //   console.error(error)
-    // })
+    .catch(error => {
+      console.error(error)
+    })
   }
 }
 
@@ -50,19 +52,27 @@ export const fetchSubscriptions = () => {
       .then(data => {
         dispatch(receiveSubscriptions(data.subscriptions))
       })
-      // .catch(error => {
-      //   console.error(error)
-      // })
+      .catch(error => {
+        if (error.status == 403) {
+          dispatch(informSessionExpired())
+        }
+      })
   }
 }
 
+export function informSessionExpired() {
+  return {
+    type: types.INFORM_SESSION_EXPIRED
+  }
+}
 
 function checkStatus(response) {
   if (response.status >= 200 && response.status < 300) {
     return response
   } else {
     var error = new Error(response.statusText)
-    error.response = response
+    error.response = response.message
+    error.status = response.status
     throw error
   }
 }

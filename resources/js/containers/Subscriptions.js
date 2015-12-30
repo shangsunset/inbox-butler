@@ -25,20 +25,25 @@ class Subscriptions extends Component {
 
   render() {
     let partial
-    const { subscriptions } = this.props
-    if (subscriptions.length > 0) {
-      partial = (
-        subscriptions.map((subscription, index) => 
-          <SubscriptionItem
-            key={index}
-            index={index}
-            subscription={subscription}
-            handleUnsubscribe={this.handleUnsubscribe}
-          />
-        )
-      )
+    const { subscriptions, isSessionExpired } = this.props
+    if (isSessionExpired) {
+      partial = <h2>Session has expired</h2>
     } else {
-      partial = <p>loading...</p>
+
+      if (subscriptions.length > 0) {
+        partial = (
+          subscriptions.map((subscription, index) => 
+            <SubscriptionItem
+              key={index}
+              index={index}
+              subscription={subscription}
+              handleUnsubscribe={this.handleUnsubscribe}
+            />
+          )
+        )
+      } else {
+        partial = <p>loading...</p>
+      }
     }
 
     return (
@@ -55,7 +60,8 @@ class Subscriptions extends Component {
 
 function mapStateToProps(state) {
   return {
-    subscriptions: state.subscriptions
+    subscriptions: state.subscriptions,
+    isSessionExpired: state.isSessionExpired
   } 
 }
 

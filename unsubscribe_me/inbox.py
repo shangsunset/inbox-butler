@@ -11,7 +11,6 @@ class Inbox():
         self.email_senders = []
         self.user_id = user_id
         self.request_time = 0
-        self.subscriptions = self.get_subscriptions()
 
     def get_subscriptions(self):
         url = 'https://www.googleapis.com/gmail/v1/users/{}/messages?q=category:(promotions+OR+primary)+newer_than:1d'.format(self.user_id)

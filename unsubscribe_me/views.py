@@ -11,7 +11,7 @@ def catch_all(path):
     return render_template('index.html')
 
 
-@app.route('/api/subscriptions')
+@app.route('/api/subscriptions', methods=['GET', 'POST'])
 def index():
     if 'access_token' in session:
         me = gmail.get('userinfo')
@@ -19,18 +19,18 @@ def index():
         access_token = get_access_token()
         start = time.time()
         inbox = Inbox(gmail, access_token, user_id)
-        subscriptions = inbox.subscriptions
-        end = time.time()
-        return jsonify({
-            "subscriptions": subscriptions,
-            'me': user_id,
-            'count': len(subscriptions),
-            'time': end - start,
-            'request time': inbox.request_time
-        })
-    return jsonify({
-        'status': 400
-    })
+
+        if request.method == 'GET':
+            subscriptions = inbox.get_subscriptions()
+            end = time.time()
+            return jsonify({
+                "subscriptions": subscriptions,
+                'me': user_id,
+                'count': len(subscriptions),
+                'time': end - start,
+                'request time': inbox.request_time
+            })
+    return session_expired()
 
 
 @app.route('/login')
@@ -54,6 +54,18 @@ def authorized():
         )
     session['access_token'] = (resp['access_token'], '')
     return redirect('subscriptions')
+
+
+@app.errorhandler(403)
+def session_expired(error=None):
+    message = {
+        'status': 403,
+        'message': 'Session expired.'
+    }
+    resp = jsonify(message)
+    resp.status_code = 403
+
+    return resp
 
 
 @gmail.tokengetter
