@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react'
 import { Link } from 'react-router'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
+import Notification from 'react-notification'
 import * as SubscriptionActions from '../actions/subscriptions.action'
 import SubscriptionItem from '../components/SubscriptionItem'
 
@@ -9,6 +10,10 @@ class Subscriptions extends Component {
   constructor(props) {
     super()
     this.handleUnsubscribe = this.handleUnsubscribe.bind(this)
+    this.onNotificationDismiss = this.onNotificationDismiss.bind(this)
+    this.state = {
+      showNotification: false,
+    }
   }
 
   componentDidMount() {
@@ -16,11 +21,19 @@ class Subscriptions extends Component {
     dispatch(SubscriptionActions.fetchSubscriptions())
   }
 
-  handleUnsubscribe(index, method) {
+  handleUnsubscribe(index, method, sender) {
     
     const { dispatch } = this.props
     dispatch(SubscriptionActions.sendUnsubscribeRequest(index, method))
+    this.setState({
+      showNotification: true,
+      unsubscribingFrom: sender
+    })
 
+  }
+
+  onNotificationDismiss() {
+    this.setState({showNotification: false})
   }
 
   render() {
@@ -50,6 +63,12 @@ class Subscriptions extends Component {
       <div className="col-md-8 col-md-offset-2">
         
         <Link to='/'>Home</Link>
+        <Notification
+          isActive={this.state.showNotification}
+          message={`You have unsubscribed from ${this.state.unsubscribingFrom}`}
+          dismissAfter={3000}
+          onDismiss={this.onNotificationDismiss}
+        />
         <ul className="list-group">
           { partial }
         </ul>

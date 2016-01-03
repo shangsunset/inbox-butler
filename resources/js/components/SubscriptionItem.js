@@ -30,7 +30,7 @@ const SubscriptionItem = (props) => {
         <div className="col-md-6">
           <button
             className="btn btn-success pull-right"
-            onClick={() => props.handleUnsubscribe(props.index, method)}>
+            onClick={() => props.handleUnsubscribe(props.index, method, subscription['sender'])}>
             Unsubscribe
           </button>
         </div>

@@ -24,6 +24,7 @@
     "history": "^1.13.1",
     "react": "^0.14.3",
     "react-dom": "^0.14.3",
+    "react-notification": "^4.0.0",
     "react-redux": "^4.0.5",
     "react-router": "^1.0.2",
     "redux": "^3.0.5",
