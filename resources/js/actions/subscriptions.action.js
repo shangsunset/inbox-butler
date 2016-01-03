@@ -20,6 +20,10 @@ export function sendUnsubscribeRequest(index, method) {
 
     return fetch('/api/subscriptions', {
       credentials: 'same-origin',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      },
       method: 'post',
       body: JSON.stringify({
         method: method

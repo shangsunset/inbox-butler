@@ -16,6 +16,7 @@ def index():
     if 'access_token' in session:
         me = gmail.get('userinfo')
         user_id = me.data['id']
+        user_email = me.data['email']
         access_token = get_access_token()
         start = time.time()
         inbox = Inbox(gmail, access_token, user_id)
@@ -25,11 +26,23 @@ def index():
             end = time.time()
             return jsonify({
                 "subscriptions": subscriptions,
-                'me': user_id,
+                'me': me.data,
                 'count': len(subscriptions),
                 'time': end - start,
                 'request time': inbox.request_time
             })
+        if request.method == 'POST':
+            unsubscribe_method = request.json['method']
+
+            if 'email' in unsubscribe_method:
+                email = unsubscribe_method['email']
+                subject = unsubscribe_method['subject']
+                inbox.create_message(email, user_email, subject)
+                r = inbox.send_email(email, user_email, subject)
+
+                return jsonify({
+                    'response': r.data
+                })
     return session_expired()
 
 

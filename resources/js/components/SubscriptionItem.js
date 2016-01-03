@@ -12,7 +12,7 @@ const SubscriptionItem = (props) => {
     if (email.indexOf('?subject=') !== -1) {
       const parts = email.split('?subject=')
       method['email'] = parts[0]
-      method['suject'] = parts[1]
+      method['subject'] = parts[1]
     } else {
       method['email'] = email
       method['subject'] = 'unsubscribe'

@@ -1,6 +1,7 @@
 import time
 import base64
 import urllib3
+from email.mime.text import MIMEText
 
 
 class Inbox():
@@ -97,3 +98,16 @@ class Inbox():
             return unsubscribe_info
 
         return None
+
+    def create_message(self, to, sender, subject):
+        message = MIMEText('')
+        message['to'] = to
+        message['from'] = sender
+        message['subject'] = subject
+        return {'raw': base64.urlsafe_b64encode(message.as_string().encode('utf-8'))}
+
+    def send_email(self, to, sender, subject):
+        url = 'https://www.googleapis.com/gmail/v1/users/{}/messages/send'.format(self.user_id)
+        message = self.create_message(to, sender, subject)
+        r = self.gmail.post(url, data=message, format='json')
+        return r
