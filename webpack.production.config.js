@@ -5,15 +5,13 @@ var ExtractTextPlugin = require("extract-text-webpack-plugin");
 module.exports = {
     context: __dirname + '/unsubscribe_me/resources',
     entry: [
-        'webpack-dev-server/client?http://localhost:8080',
-        'webpack/hot/only-dev-server',
         './js/index.js',
     ],
 
     output: {
-        // path: __dirname + '/public/js',
+        path: __dirname + '/unsubscribe_me/static/js',
         filename: "bundle.js",
-        publicPath: 'http://localhost:8080/static/'
+        // publicPath: 'http://localhost:8080/static/'
     },
 
     module: {

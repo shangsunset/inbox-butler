@@ -11,7 +11,7 @@ export default class Home extends Component {
       <div>
         <a href='/login'>Get Started!</a>
 
-        <Link to='/subscriptions'>Sub</Link>
+        <Link to='/subscriptions'>Your Subscriptions</Link>
       </div>
     )
   }

@@ -55,7 +55,7 @@ class Subscriptions extends Component {
           )
         )
       } else {
-        partial = <p>loading...</p>
+        partial = <p>this may take a while...</p>
       }
     }
 
