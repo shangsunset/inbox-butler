@@ -1,5 +1,4 @@
 import time
-import urllib3
 from flask import redirect, url_for, session, request, jsonify, render_template
 from . import app, gmail
 from .inbox import Inbox
