@@ -1,8 +1,9 @@
+import os
 from flask import Flask
 from flask_oauthlib.client import OAuth
 
 app = Flask(__name__)
-app.config.from_object('config.DevelopmentConfig')
+app.config.from_object(os.environ.get('APP_CONFIG'))
 
 
 oauth = OAuth(app)
