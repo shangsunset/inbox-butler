@@ -1,4 +1,4 @@
-# Unsubscribe Me
+# C-3PO
 Unsubscribe Me is born out of frustration with annoying subscriptions in email inboxes. It helps you unsubscribe from various newsletters with just one click :)
 (Currently only support Gmail)
 
