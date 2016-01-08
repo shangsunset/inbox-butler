@@ -1,6 +1,6 @@
 import * as types from '../constants/ActionTypes'
 
-export const receiveSubscriptions = (data) => {
+export function receiveSubscriptions(data) {
   return {
     type: types.RECEIVE_SUBSCRIPTIONS,
     subscriptions: data
@@ -43,10 +43,10 @@ export function sendUnsubscribeRequest(index, method) {
   }
 }
 
-export const fetchSubscriptions = () => {
+function fetchSubscriptions() {
   return (dispatch) => {
 
-      return fetch('/api/subscriptions', {
+    return fetch('/api/subscriptions', {
         credentials: 'same-origin'
       })
       .then(checkStatus)
@@ -61,6 +61,22 @@ export const fetchSubscriptions = () => {
           dispatch(informSessionExpired())
         }
       })
+  }
+}
+
+function shouldFetchSubscriptions(state) {
+  const subscriptions = state.subscriptions
+  if (subscriptions.length == 0) {
+    return true
+  }
+  return false
+}
+
+export function fetchSubscriptionIfNeeded() {
+  return (dispatch, getState) => {
+    if (shouldFetchSubscriptions(getState())) {
+      return dispatch(fetchSubscriptions()) 
+    }
   }
 }
 

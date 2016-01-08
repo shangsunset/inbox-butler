@@ -18,7 +18,7 @@ class Subscriptions extends Component {
 
   componentDidMount() {
     const { dispatch } = this.props
-    dispatch(SubscriptionActions.fetchSubscriptions())
+    dispatch(SubscriptionActions.fetchSubscriptionIfNeeded())
   }
 
   handleUnsubscribe(index, method, sender) {

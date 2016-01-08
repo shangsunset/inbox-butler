@@ -25,5 +25,4 @@ export default function subscriptions(state={
     default:
       return state
   }
-  
 }
