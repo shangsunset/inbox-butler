@@ -35,7 +35,7 @@ module.exports = {
 
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
-        new ExtractTextPlugin(__dirname + "unsubscribe_me/static/css/styles.css")
+        new ExtractTextPlugin("../css/styles.css")
         // new ExtractTextPlugin("styles.css")
     ],
 

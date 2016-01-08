@@ -7,5 +7,5 @@
 
 ### To run:
 
-`npm start`
-`./run.sh`
+1. `npm start`
+2. `./run.sh`
