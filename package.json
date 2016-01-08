@@ -4,7 +4,7 @@
   "description": "find all of your newsletters so you can unsubscribe from them at once",
   "scripts": {
     "start": "webpack-dev-server --hot --inline --progress",
-    "build": "webpack --config webpack.production.config.js --progress --colors"
+    "build": "webpack -p --config webpack.production.config.js --progress --colors"
   },
   "repository": {
     "type": "git",
