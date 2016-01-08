@@ -7,7 +7,7 @@ Unsubscribe Me is born out of frustration with annoying subscriptions in email i
 1. pip install -r requirements.txt
 2. npm install
 
-### To run:
+### To run locally:
 
 1. `npm start`
 2. `python app.py`
