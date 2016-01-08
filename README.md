@@ -1,4 +1,6 @@
 # Unsubscribe Me
+Unsubscribe Me is born out of frustration with annoying subscriptions in email inboxes. It helps you unsubscribe from various newsletters with just one click :)
+(Currently only support Gmail)
 
 ### To install(only support python3):
 
@@ -8,4 +10,4 @@
 ### To run:
 
 1. `npm start`
-2. `./run.sh`
+2. `python app.py`
