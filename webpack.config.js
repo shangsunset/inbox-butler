@@ -37,7 +37,6 @@ module.exports = {
 
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
-        // new ExtractTextPlugin(__dirname + "c3po/static/css/styles.css")
         new ExtractTextPlugin("styles.css")
     ],
 
