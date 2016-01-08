@@ -7,7 +7,7 @@ import createBrowserHistory from 'history/lib/createBrowserHistory'
 
 import configureStore from './store/configureStore'
 import Home from './containers/Home'
-import Cover from './containers/Cover'
+import Cover from './components/Cover'
 import Subscriptions from './containers/Subscriptions'
 
 let history = createBrowserHistory()

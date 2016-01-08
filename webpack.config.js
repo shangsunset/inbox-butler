@@ -3,7 +3,7 @@ var path = require('path');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
-    context: __dirname + '/unsubscribe_me/resources',
+    context: __dirname + '/c3po/resources',
     entry: [
         'webpack-dev-server/client?http://localhost:8080',
         'webpack/hot/only-dev-server',
@@ -37,7 +37,7 @@ module.exports = {
 
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
-        // new ExtractTextPlugin(__dirname + "unsubscribe_me/static/css/styles.css")
+        // new ExtractTextPlugin(__dirname + "c3po/static/css/styles.css")
         new ExtractTextPlugin("styles.css")
     ],
 

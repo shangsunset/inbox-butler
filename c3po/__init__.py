@@ -22,4 +22,4 @@ gmail = oauth.remote_app(
     authorize_url='https://accounts.google.com/o/oauth2/auth',
 )
 
-from unsubscribe_me import views
+from c3po import views

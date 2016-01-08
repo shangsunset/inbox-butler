@@ -16,7 +16,7 @@ export default class Home extends Component {
             <div className="masthead clearfix">
               <div className="inner">
                 <h2 className="masthead-brand">
-                <Link to='/'>Unsubscribe Me</Link>
+                <Link to='/'>3PO</Link>
                 </h2>
                 <nav>
                   <ul className="nav masthead-nav">
