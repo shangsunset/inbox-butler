@@ -7,6 +7,7 @@ import createBrowserHistory from 'history/lib/createBrowserHistory'
 
 import configureStore from './store/configureStore'
 import Home from './containers/Home'
+import Cover from './containers/Cover'
 import Subscriptions from './containers/Subscriptions'
 
 let history = createBrowserHistory()
@@ -15,7 +16,7 @@ const store = configureStore()
 const App = React.createClass({
   render() {
     return (
-      <div>
+      <div className="site-wrapper">
         {this.props.children}
       </div>
     )
@@ -27,8 +28,10 @@ render(
   <Provider store={store}>
     <Router history={history}>
       <Route component={App}>
-        <Route path="/" component={Home} />
-        <Route path="/subscriptions" component={Subscriptions} />
+        <Route component={Home}>
+          <Route path="/" component={Cover} />
+          <Route path="/subscriptions" component={Subscriptions} />
+        </Route>
       </Route>
     </Router>
   </Provider>,

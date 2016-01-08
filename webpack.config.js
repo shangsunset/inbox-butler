@@ -8,6 +8,7 @@ module.exports = {
         'webpack-dev-server/client?http://localhost:8080',
         'webpack/hot/only-dev-server',
         './js/index.js',
+        './css/main.css'
     ],
 
     output: {
@@ -36,8 +37,8 @@ module.exports = {
 
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
-        // new ExtractTextPlugin("../css/styles.css")
-        // new ExtractTextPlugin("styles.css")
+        // new ExtractTextPlugin(__dirname + "unsubscribe_me/static/css/styles.css")
+        new ExtractTextPlugin("styles.css")
     ],
 
   node: {

@@ -60,9 +60,8 @@ class Subscriptions extends Component {
     }
 
     return (
-      <div className="col-md-8 col-md-offset-2">
+      <div style={{height: '100%', marginTop: 130 }} className="col-md-8 col-md-offset-2">
         
-        <Link to='/'>Home</Link>
         <Notification
           isActive={this.state.showNotification}
           message={`You have unsubscribed from ${this.state.unsubscribingFrom}`}

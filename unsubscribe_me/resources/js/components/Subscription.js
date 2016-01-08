@@ -5,9 +5,9 @@ const Subscription = (props) => {
   const { subscription } = props
 
   return (
-    <div>
+    <p style={{color: '#333'}}>
       {subscription.sender}
-    </div>
+    </p>
   )
 }
 

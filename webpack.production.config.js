@@ -6,6 +6,7 @@ module.exports = {
     context: __dirname + '/unsubscribe_me/resources',
     entry: [
         './js/index.js',
+        './css/main.css'
     ],
 
     output: {
@@ -34,7 +35,7 @@ module.exports = {
 
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
-        // new ExtractTextPlugin("../css/styles.css")
+        new ExtractTextPlugin(__dirname + "unsubscribe_me/static/css/styles.css")
         // new ExtractTextPlugin("styles.css")
     ],
 

@@ -3,12 +3,20 @@
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
 
+{% if config['DEBUG'] %}
+  <link rel="stylesheet" href="http://localhost:8080/static/styles.css" type="text/css" media="screen" charset="utf-8">
+{% else %}
+  <script src="{{ url_for('static', filename='css/styles.js') }}"></script>
+{% endif %}
+
 <body>
-  <div id="content" class="container"></div>
+  <div id="content"></div>
 </body>
+
 
 {% if config['DEBUG'] %}
   <script src="http://localhost:8080/static/bundle.js"></script>
 {% else %}
-<script src="{{ url_for('static', filename='js/bundle.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/bundle.js') }}"></script>
 {% endif %}
+

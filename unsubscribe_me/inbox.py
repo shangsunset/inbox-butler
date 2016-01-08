@@ -14,7 +14,7 @@ class Inbox():
         self.request_time = 0
 
     def get_subscriptions(self):
-        url = 'https://www.googleapis.com/gmail/v1/users/{}/messages?q=category:(promotions+OR+primary)+newer_than:3d'.format(self.user_id)
+        url = 'https://www.googleapis.com/gmail/v1/users/{}/messages?q=category:(promotions+OR+primary)+newer_than:1d'.format(self.user_id)
         messages = []
 
         try:
