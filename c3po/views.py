@@ -4,12 +4,6 @@ from . import app, gmail
 from .inbox import Inbox
 
 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def catch_all(path):
-    return render_template('index.html')
-
-
 @app.route('/api/subscriptions', methods=['GET', 'POST'])
 def index():
     if 'access_token' in session:
@@ -23,6 +17,7 @@ def index():
         if request.method == 'GET':
             subscriptions = inbox.get_subscriptions()
             end = time.time()
+            inbox = Inbox(gmail, access_token, user_id)
             return jsonify({
                 "subscriptions": subscriptions,
                 'me': me.data,
@@ -32,12 +27,12 @@ def index():
             })
         if request.method == 'POST':
             unsubscribe_method = request.json['method']
+            merchant = request.json['merchant']
 
             if 'email' in unsubscribe_method:
                 email = unsubscribe_method['email']
                 subject = unsubscribe_method['subject']
-                inbox.create_message(email, user_email, subject)
-                r = inbox.send_email(email, user_email, subject)
+                r = inbox.send_email(email, user_email, subject, merchant)
 
                 return jsonify({
                     'response': r.data
@@ -66,6 +61,12 @@ def authorized():
         )
     session['access_token'] = (resp['access_token'], '')
     return redirect('subscriptions')
+
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def catch_all(path):
+    return render_template('index.html')
 
 
 @app.errorhandler(403)

@@ -24,7 +24,7 @@ class Subscriptions extends Component {
   handleUnsubscribe(index, method, sender) {
     
     const { dispatch } = this.props
-    dispatch(SubscriptionActions.sendUnsubscribeRequest(index, method))
+    dispatch(SubscriptionActions.sendUnsubscribeRequest(index, method, sender))
     this.setState({
       showNotification: true,
       unsubscribingFrom: sender

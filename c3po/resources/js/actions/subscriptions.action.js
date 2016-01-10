@@ -14,7 +14,7 @@ export function removeSubscription(index) {
   }
 }
 
-export function sendUnsubscribeRequest(index, method) {
+export function sendUnsubscribeRequest(index, method, merchant) {
   return dispatch => {
     dispatch(removeSubscription(index))
 
@@ -26,7 +26,8 @@ export function sendUnsubscribeRequest(index, method) {
       },
       method: 'post',
       body: JSON.stringify({
-        method: method
+        method,
+        merchant
       })
     })
     .then(checkStatus)
