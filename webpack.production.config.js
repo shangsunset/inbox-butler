@@ -3,14 +3,14 @@ var path = require('path');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
-    context: __dirname + '/c3po/resources',
+    context: __dirname + '/inboxbutler/resources',
     entry: [
         './js/index.js',
         './css/main.css'
     ],
 
     output: {
-        path: __dirname + '/c3po/static/js',
+        path: __dirname + '/inboxbutler/static/js',
         filename: "bundle.js",
         // publicPath: 'http://localhost:8080/static/'
     },

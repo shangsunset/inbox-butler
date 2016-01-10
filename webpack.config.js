@@ -3,7 +3,7 @@ var path = require('path');
 var ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 module.exports = {
-    context: __dirname + '/c3po/resources',
+    context: __dirname + '/inboxbutler/resources',
     entry: [
         'webpack-dev-server/client?http://localhost:8080',
         'webpack/hot/only-dev-server',
