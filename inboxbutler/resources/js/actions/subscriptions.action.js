@@ -16,31 +16,40 @@ export function removeSubscription(index) {
 
 export function sendUnsubscribeRequest(index, method, merchant) {
   return dispatch => {
-    dispatch(removeSubscription(index))
 
-    return fetch('/api/subscriptions', {
-      credentials: 'same-origin',
-      headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-      },
-      method: 'post',
-      body: JSON.stringify({
-        method,
-        merchant
+    //if method doesnt contain a mailto, open a tab for user to unsubscribe
+    if (!('email' in method)) {
+
+      window.open(method['link'], '_blank')
+
+    } else {
+
+      fetch('/api/subscriptions', {
+        credentials: 'same-origin',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        method: 'post',
+        body: JSON.stringify({
+          method,
+          merchant
+        })
       })
-    })
-    .then(checkStatus)
-    .then(response => {
-      return response.json()
-    })
-    .then(result => {
-      console.log(result);
-      
-    })
-    .catch(error => {
-      console.error(error)
-    })
+      .then(checkStatus)
+      .then(response => {
+        return response.json()
+      })
+      .then(result => {
+        console.log(result);
+        
+      })
+      .catch(error => {
+        console.error(error)
+      })
+    } 
+
+    dispatch(removeSubscription(index))
   }
 }
 

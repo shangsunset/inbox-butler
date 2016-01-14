@@ -37,6 +37,9 @@ def index():
                 return jsonify({
                     'response': r.data
                 })
+            else:
+                link = unsubscribe_method['link']
+                return jsonify({'link': link})
     return session_expired()
 
 
