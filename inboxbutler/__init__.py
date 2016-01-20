@@ -1,10 +1,11 @@
 import os
 from flask import Flask
 from flask_oauthlib.client import OAuth
+import redis
 
 app = Flask(__name__)
 app.config.from_object(os.environ.get('APP_CONFIG'))
-
+redis = redis.from_url(app.config.get('REDIS_URL'))
 
 oauth = OAuth(app)
 

@@ -22,32 +22,31 @@ export function sendUnsubscribeRequest(index, method, merchant) {
 
       window.open(method['link'], '_blank')
 
-    } else {
+    }
 
-      fetch('/api/subscriptions', {
-        credentials: 'same-origin',
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json'
-        },
-        method: 'post',
-        body: JSON.stringify({
-          method,
-          merchant
-        })
+    fetch('/api/subscriptions', {
+      credentials: 'same-origin',
+      headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+      },
+      method: 'post',
+      body: JSON.stringify({
+        method,
+        merchant
       })
-      .then(checkStatus)
-      .then(response => {
-        return response.json()
-      })
-      .then(result => {
-        console.log(result);
-        
-      })
-      .catch(error => {
-        console.error(error)
-      })
-    } 
+    })
+    .then(checkStatus)
+    .then(response => {
+      return response.json()
+    })
+    .then(result => {
+      console.log(result);
+      
+    })
+    .catch(error => {
+      console.error(error)
+    })
 
     dispatch(removeSubscription(index))
   }

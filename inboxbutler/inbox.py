@@ -1,16 +1,20 @@
 import time
+import json
+import pickle
 import base64
 import urllib3
 from email.mime.text import MIMEText
+from . import redis
 
 
 class Inbox():
 
-    def __init__(self, gmail, access_token, user_id):
+    def __init__(self, gmail, access_token, user_id, user_email):
         self.gmail = gmail
         self.access_token = access_token
         self.email_senders = []
         self.user_id = user_id
+        self.user_email = user_email
         self.request_time = 0
 
     def get_subscriptions(self):
@@ -34,15 +38,27 @@ class Inbox():
             print(err.code)
 
         subscriptions = []
+        cancelled_subscriptions = self.get_canceled_subscriptions()
         for message in messages:
-            email = self.get_unsubscribe_info(message['id'])
+            email = self.parse_newsletter(message['id'])
 
             if email is not None:
-                subscriptions.append(email.copy())
+                if cancelled_subscriptions is not None:
+                    if email['sender'] not in cancelled_subscriptions:
+                        subscriptions.append(email.copy())
+                else:
+                    subscriptions.append(email.copy())
 
         return subscriptions
 
-    def get_unsubscribe_info(self, email_id):
+    def get_canceled_subscriptions(self):
+        cancelled_subscriptions = redis.get(self.user_email)
+        if cancelled_subscriptions is not None:
+            cancelled_subscriptions = pickle.loads(cancelled_subscriptions)
+        print(cancelled_subscriptions)
+        return cancelled_subscriptions
+
+    def parse_newsletter(self, email_id):
         """
         get email sender name, address, and unscribe link from email header
         returns a dict contains sender'name and unsubscribe methods
