@@ -13,7 +13,7 @@ pyasn1-modules==0.0.8
 redis==2.10.5
 requests==2.9.0
 requests-oauthlib==0.6.0
-rsa==3.2.3
+rsa==4.7
 simplejson==3.8.1
 six==1.10.0
 uritemplate==0.6
